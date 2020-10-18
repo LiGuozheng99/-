@@ -1,0 +1,75 @@
+states = ('Rainy', 'Sunny')
+
+observations = ('walk', 'shop', 'clean')
+
+start_probability = {'Rainy': 0.6, 'Sunny': 0.4}
+
+transition_probability = {
+    'Rainy': {'Rainy': 0.7, 'Sunny': 0.3},
+    'Sunny': {'Rainy': 0.4, 'Sunny': 0.6},
+}
+
+emission_probability = {
+    'Rainy': {'walk': 0.1, 'shop': 0.4, 'clean': 0.5},
+    'Sunny': {'walk': 0.6, 'shop': 0.3, 'clean': 0.1},
+}
+# 第一天（散步）
+R1 = start_probability.get('Rainy')
+S1 = start_probability.get('Sunny')
+
+RR = R1 * transition_probability.get('Rainy').get('Rainy')
+RS = R1 * transition_probability.get('Rainy').get('Sunny')
+
+SR = S1 * transition_probability.get('Sunny').get('Rainy')
+SS = S1 * transition_probability.get('Sunny').get('Sunny')
+
+a1 = start_probability.get('Rainy') * emission_probability.get('Rainy').get('walk')
+a2 = start_probability.get('Sunny') * emission_probability.get('Sunny').get('walk')
+# if(a1>a2):
+#      print('a1rainy:',a1)
+# else :
+#      print('a2sunny:',a2)
+# 第一天阴天情况下，第二天（shop）
+if a1 > a2:
+    print('a1rainy:', a1)
+    b1 = RR * emission_probability.get('Rainy').get('shop')
+    b2 = RS * emission_probability.get('Sunny').get('shop')
+    if b1 > b2:
+        print('b1rainy:', b1)
+        c1 = RR * transition_probability.get('Rainy').get('Rainy') * emission_probability.get('Rainy').get('clean')
+        c2 = RR * transition_probability.get('Rainy').get('Sunny') * emission_probability.get('Sunny').get('clean')
+        if c1 > c2:
+            print('c1rainy:', c1)
+        else:
+            print('c2sunny:', c2)
+    else:
+        print('b2sunny:', b2)
+        c1 = RS * transition_probability.get('Sunny').get('Rainy') * emission_probability.get('Rainy').get('clean')
+        c2 = RS * transition_probability.get('Sunny').get('Sunny') * emission_probability.get('Sunny').get('clean')
+        if c1 > c2:
+            print('c1rainy:', c1)
+        else:
+            print('c2sunny:', c2)
+# 第一天晴天
+else:
+    print('a2sunny:', a2)
+    b1 = SR * emission_probability.get('Rainy').get('shop')
+    b2 = SS * emission_probability.get('Sunny').get('shop')
+    if b1 > b2:
+        # 第一天晴天，第二天阴天
+        print('b1rainy', b1)
+        c1 = SR * transition_probability.get('Rainy').get('Rainy') * emission_probability.get('Rainy').get('clean')
+        c2 = SR * transition_probability.get('Rainy').get('Sunny') * emission_probability.get('Sunny').get('clean')
+        if c1 > c2:
+            print('c1rainy:', c1)
+        else:
+            print('c2sunny:', c2)
+        # 第一天晴天，第二天晴天
+    else:
+        print('b2sunny:', b2)
+        c1 = SS * transition_probability.get('Sunny').get('Rainy') * emission_probability.get('Rainy').get('clean')
+        c2 = SS * transition_probability.get('Sunny').get('Sunny') * emission_probability.get('Sunny').get('clean')
+        if c1 > c2:
+            print('c1rainy:', c1)
+        else:
+            print('c2sunny:', c2)
