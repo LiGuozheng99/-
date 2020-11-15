@@ -1,0 +1,40 @@
+class myand(object):
+    
+    def __init__(self):
+        self.w1=0
+        self.w2=0
+        self.b=0
+        
+    def mysum(self,x1,x2):
+        return self.w1*x1+self.w2*x2+self.b
+    
+    def ac(self,x):
+        if x>0: 
+            return 1 
+        else: 
+            return 0
+        
+    def dd(self,x1,x2,t,y):
+        a=0.01
+        self.w1=self.w1+a*(t-y)*x1
+        self.w2=self.w2+a*(t-y)*x2
+        self.b=self.b+a*(t-y)
+        return self.w1,self.w2,self.b
+    
+    def train(self,data):
+        for i in range(1000):
+            for j in range(4):
+                x1=data[j][0]
+                x2=data[j][1]
+                t=data[j][2]
+                p=self.mysum(x1,x2)
+                self.dd(x1,x2,t,p)
+        return self.w1,self.w2,self.b
+                
+
+
+if __name__ == '__main__':
+    data=[[0,0,0],[0,1,0],[1,0,0],[1,1,1]]
+    m=myand()
+    y=m.train(data)
+    print(y)
